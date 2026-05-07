@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matti Ur Rehman | Full-Stack Developer</title>
+  <meta name="description"
+    content="Portfolio of Matti Ur Rehman – Full-Stack Developer building scalable web apps and AI-powered solutions." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- Noise Overlay for Premium Texture -->
+  <div class="noise-overlay"></div>
+
+  <!-- Scroll Progress Bar -->
+  <div id="scroll-progress-bar"></div>
+
+  <!-- Particle Canvas -->
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- Custom Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursor-follower"></div>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#hero" class="nav-logo magnetic-btn">MR<span class="logo-dot">.</span></a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#skills" class="nav-link">Skills</a></li>
+        <li><a href="#projects" class="nav-link">Projects</a></li>
+        <li><a href="#journey" class="nav-link">Journey</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+      <a href="mailto:mattirehman343@gmail.com" class="nav-cta magnetic-btn">Hire Me</a>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main content wrapper for smooth scrolling -->
+  <main id="smooth-wrapper">
+    <div id="smooth-content">
+
+      <!-- ===== HERO ===== -->
+      <section class="hero" id="hero">
+        <div class="hero-content">
+          <div class="hero-badge" data-speed="0.8">
+            <span class="badge-dot"></span> Available for work
+          </div>
+          <h1 class="hero-greeting split-text">Hi, I'm<span class="gradient-text">Matti Ur Rehman</span> 👋</h1>
+          <h2 class="hero-headline split-text">Full-Stack Developer</h2>
+          <p class="hero-sub">I build <span class="highlight-text">scalable</span>, user-centric web
+            applications
+            and <span class="highlight-text">AI-powered solutions</span> that solve real-world problems.</p>
+          <div class="hero-buttons">
+            <a href="#projects" class="btn btn-primary magnetic-btn">
+              <span>View My Projects</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </a>
+            <a href="#contact" class="btn btn-secondary magnetic-btn">Contact Me</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat"><span class="stat-num" data-target="1">20</span><span class="stat-plus">+</span>
+              <p>Leet Code Problems Solved.</p>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat"><span class="stat-num" data-target="10">5</span><span class="stat-plus">+</span>
+              <p>University Projects</p>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat"><span class="stat-num" data-target="10">3</span><span class="stat-plus">+</span>
+              <p>Side Projects</p>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat"><span class="stat-num" data-target="5">10</span><span class="stat-plus">+</span>
+              <p>Coding Languages Learned</p>
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-avatar-wrapper" data-speed="1.15">
+            <div class="avatar-ring ring-1"></div>
+            <div class="avatar-ring ring-2"></div>
+            <div class="avatar-ring ring-3"></div>
+            <div class="avatar-circle">
+              <span class="avatar-initials">MR</span>
+            </div>
+            <div class="floating-badge badge-react magnetic-btn">⚛ React</div>
+            <div class="floating-badge badge-node magnetic-btn">🟢 Node.js</div>
+            <div class="floating-badge badge-ai magnetic-btn">🤖 AI</div>
+            <div class="floating-badge badge-mongo magnetic-btn">🍃 MongoDB</div>
+            <div class="floating-badge badge-html magnetic-btn">🌐 HTML/CSS/JS</div>
+            <div class="floating-badge badge-dsa magnetic-btn">🧩 DSA/OOP</div>
+          </div>
+        </div>
+        <div class="scroll-indicator">
+          <span>Scroll</span>
+          <div class="scroll-line"></div>
+        </div>
+      </section>
+
+      <!-- Section Divider -->
+      <div class="section-divider">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <path
+            d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+            class="shape-fill"></path>
+        </svg>
+      </div>
+
+      <!-- ===== ABOUT ===== -->
+      <section class="section about" id="about">
+        <div class="section-orb orb-left" data-speed="0.8"></div>
+        <div class="section-orb orb-right" data-speed="1.25"></div>
+        <div class="container">
+          <div class="section-header">
+            <p class="section-label">Who I Am</p>
+            <h2 class="section-title split-text">About <span class="gradient-text">Me</span></h2>
+          </div>
+          <div class="about-grid">
+            <div class="about-card glass-card gsap-fade-up">
+              <div class="about-icon">🚀</div>
+              <h3>Passionate Builder</h3>
+              <p>I am a passionate Web Developer based in <strong>Pakistan</strong>, specializing in modern web
+                development and full-stack architecture. I thrive on turning complex problems into elegant, efficient,
+                and user-friendly digital experiences.</p>
+            </div>
+            <div class="about-card glass-card gsap-fade-up">
+              <div class="about-icon">💡</div>
+              <h3>Always Learning</h3>
+              <p>I have gained hands-on experience building scalable applications, writing clean code, and working with
+                modern technologies. I am constantly adapting to new tech, with a recent focus on <strong>integrating
+                  AI</strong> into everyday web applications.</p>
+            </div>
+            <div class="about-card glass-card gsap-fade-up">
+              <div class="about-icon">🎯</div>
+              <h3>Goal Driven</h3>
+              <p>I believe great software is built at the intersection of strong engineering and thoughtful user
+                experience.
+                Every line of code I write is intentional, every feature purposeful.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SKILLS ===== -->
+      <section class="section skills" id="skills">
+        <div class="section-orb orb-right" data-speed="0.75"></div>
+        <div class="section-orb orb-bottom" data-speed="1.15"></div>
+        <div class="container">
+          <div class="section-header">
+            <p class="section-label">What I Work With</p>
+            <h2 class="section-title split-text">Technologies & <span class="gradient-text">Tools</span></h2>
+          </div>
+          <div class="skills-grid">
+            <div class="skill-category glass-card gsap-fade-up">
+              <div class="skill-category-header">
+                <span class="skill-icon">🎨</span>
+                <h3>Frontend</h3>
+              </div>
+              <div class="skill-tags">
+                <span class="skill-tag magnetic-btn">React.js</span>
+                <span class="skill-tag magnetic-btn">JavaScript </span>
+                <span class="skill-tag magnetic-btn">HTML5</span>
+                <span class="skill-tag magnetic-btn">CSS3</span>
+                <span class="skill-tag magnetic-btn">Tailwind CSS</span>
+              </div>
+            </div>
+
+            <div class="skill-category glass-card gsap-fade-up">
+              <div class="skill-category-header">
+                <span class="skill-icon">⚙️</span>
+                <h3>Backend</h3>
+              </div>
+              <div class="skill-tags">
+                <span class="skill-tag magnetic-btn">Node.js</span>
+                <span class="skill-tag magnetic-btn">Express.js</span>
+                <span class="skill-tag magnetic-btn">RESTful APIs</span>
+                <span class="skill-tag magnetic-btn">Python</span>
+              </div>
+            </div>
+
+            <div class="skill-category glass-card gsap-fade-up">
+              <div class="skill-category-header">
+                <span class="skill-icon">🗄️</span>
+                <h3>Databases</h3>
+              </div>
+              <div class="skill-tags">
+                <span class="skill-tag magnetic-btn">MongoDB</span>
+                <span class="skill-tag magnetic-btn">MySQL</span>
+                <span class="skill-tag magnetic-btn">Xampp</span>
+                <span class="skill-tag magnetic-btn">MongoDB Atlas</span>
+              </div>
+            </div>
+
+            <div class="skill-category glass-card gsap-fade-up">
+              <div class="skill-category-header">
+                <span class="skill-icon">🌟</span>
+                <h3>Extra Tools</h3>
+              </div>
+              <div class="skill-tags">
+                <span class="skill-tag magnetic-btn">Vercel</span>
+                <span class="skill-tag magnetic-btn">Railway</span>
+                <span class="skill-tag magnetic-btn">SupaBase</span>
+              </div>
+            </div>
+            <div class="skill-category glass-card gsap-fade-up">
+              <div class="skill-category-header">
+                <span class="skill-icon">🛠️</span>
+                <h3>Tools & Integrations</h3>
+              </div>
+              <div class="skill-tags">
+                <span class="skill-tag magnetic-btn">Git & GitHub</span>
+                <span class="skill-tag magnetic-btn">Vercel</span>
+                <span class="skill-tag magnetic-btn">Railway</span>
+                <span class="skill-tag magnetic-btn">OpenAI API</span>
+                <span class="skill-tag magnetic-btn">Recharts</span>
+                <span class="skill-tag magnetic-btn">JWT Auth</span>
+                <span class="skill-tag magnetic-btn">Vs Code</span>
+                <span class="skill-tag magnetic-btn">Figma</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section Divider -->
+      <div class="section-divider reverse">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <path
+            d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+            class="shape-fill"></path>
+        </svg>
+      </div>
+
+      <!-- ===== PROJECTS ===== -->
+      <section class="section projects" id="projects">
+        <div class="section-orb orb-left" data-speed="1.4"></div>
+        <div class="section-orb orb-bottom" data-speed="0.8"></div>
+        <div class="container">
+          <div class="section-header">
+            <p class="section-label">My Work</p>
+            <h2 class="section-title split-text">What I've <span class="gradient-text">Built</span></h2>
+          </div>
+          <div class="projects-grid">
+            <!-- ===== PROJECT 1 – SleepAI (Purple/Cyan Theme) ===== -->
+            <div class="project-card featured-card card-theme-1 glass-card gsap-fade-up">
+              <div class="project-featured-label theme1-label">🏆 Featured Project</div>
+              <div class="project-header">
+                <div class="project-icon-wrap theme1-icon">🌙</div>
+                <div class="project-links">
+                  <a href="https://sleep-tracker-two-kappa.vercel.app" target="_blank"
+                    class="project-link-btn theme1-btn magnetic-btn" title="Live Demo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+                      <polyline points="15 3 21 3 21 9" />
+                      <line x1="10" y1="14" x2="21" y2="3" />
+                    </svg>
+                  </a>
+                  <a href="https://github.com/Matti11281/sleep-tracker" target="_blank"
+                    class="project-link-btn theme1-btn magnetic-btn" title="GitHub">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path
+                        d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+              <h3 class="project-title theme1-title">SleepAI – AI-Powered Health &amp; Sleep Tracker</h3>
+              <p class="project-desc">A highly interactive, full-stack MERN application designed to track sleep
+                patterns, analyze daily habits, and provide personalized AI-driven coaching. Built to empower users
+                with data-backed insights and gamified routines.</p>
+              <ul class="project-features">
+                <li><span class="feature-dot theme1-dot"></span><strong>AI Sleep Coach:</strong> OpenAI API generates
+                  personalized weekly report cards &amp; wind-down routines.</li>
+                <li><span class="feature-dot theme1-dot"></span><strong>Data Visualization:</strong> Dynamic Recharts
+                  correlation charts mapping habits to sleep quality.</li>
+                <li><span class="feature-dot theme1-dot"></span><strong>Gamification:</strong> Custom streak &amp; badge
+                  system to boost daily goal engagement.</li>
+                <li><span class="feature-dot theme1-dot"></span><strong>Secure Auth:</strong> JWT-based authentication
+                  with encrypted MongoDB Atlas storage.</li>
+              </ul>
+              <div class="project-tech">
+                <span class="tech-badge theme1-badge">React</span>
+                <span class="tech-badge theme1-badge">Node.js</span>
+                <span class="tech-badge theme1-badge">Express</span>
+                <span class="tech-badge theme1-badge">MongoDB</span>
+                <span class="tech-badge theme1-badge">OpenAI API</span>
+                <span class="tech-badge theme1-badge">Recharts</span>
+              </div>
+            </div>
+
+            <!-- ===== PROJECT 2 – HexaCore (Orange/Amber Theme) ===== -->
+            <div class="project-card card-theme-2 glass-card gsap-fade-up">
+              <div class="project-featured-label theme2-label">🚀 AI Platform</div>
+              <div class="project-header">
+                <div class="project-icon-wrap theme2-icon">🔮</div>
+                <div class="project-links">
+                  <a href="https://github.com/Matti11281" target="_blank"
+                    class="project-link-btn theme2-btn magnetic-btn" title="GitHub">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path
+                        d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+              <h3 class="project-title theme2-title">HexaCore – Multi-Feature AI Web Platform</h3>
+              <p class="project-desc">A full-stack web application that unifies six powerful tools into one seamless
+                platform — combining AI intelligence, real-time data, resume analysis, and productivity utilities,
+                all protected behind a secure authenticated gateway.</p>
+              <ul class="project-features">
+                <li><span class="feature-dot theme2-dot"></span><strong>AI Chatbot:</strong> Smart, context-aware
+                  responses powered by Gemini &amp; OpenRouter APIs.</li>
+                <li><span class="feature-dot theme2-dot"></span><strong>Weather System:</strong> Real-time weather data
+                  with a dynamic, animated UI via external API.</li>
+                <li><span class="feature-dot theme2-dot"></span><strong>Image Generator:</strong> AI-based image
+                  creation from text prompts using generative APIs.</li>
+                <li><span class="feature-dot theme2-dot"></span><strong>CV Analyzer:</strong> Resume analysis using
+                  Python &amp; NLP techniques for smart feedback.</li>
+                <li><span class="feature-dot theme2-dot"></span><strong>Productivity Tools:</strong> Built-in to-do
+                  manager &amp; interactive typing speed game.</li>
+                <li><span class="feature-dot theme2-dot"></span><strong>Secure Auth:</strong> Full login/signup system
+                  with encrypted MySQL database backend.</li>
+              </ul>
+              <div class="project-tech">
+                <span class="tech-badge theme2-badge">HTML</span>
+                <span class="tech-badge theme2-badge">CSS</span>
+                <span class="tech-badge theme2-badge">JavaScript</span>
+                <span class="tech-badge theme2-badge">PHP</span>
+                <span class="tech-badge theme2-badge">Python</span>
+                <span class="tech-badge theme2-badge">MySQL</span>
+                <span class="tech-badge theme2-badge">Gemini API</span>
+                <span class="tech-badge theme2-badge">NLP</span>
+              </div>
+            </div>
+
+            <!-- ===== PROJECT 3 – Banking App (Emerald/Green Theme) ===== -->
+            <div class="project-card card-theme-3 glass-card gsap-fade-up">
+              <div class="project-featured-label theme3-label">💳 FinTech App</div>
+              <div class="project-header">
+                <div class="project-icon-wrap theme3-icon">🏦</div>
+                <div class="project-links">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                  </svg>
+                  </a>
+                </div>
+              </div>
+              <h3 class="project-title theme3-title">Banking App – Full-Stack Finance Platform</h3>
+              <p class="project-desc">A secure, fully functional banking web application enabling users to manage
+                personal accounts, execute fund transfers, and track complete transaction histories — built with
+                a focus on data integrity, security, and a clean responsive interface.</p>
+              <ul class="project-features">
+                <li><span class="feature-dot theme3-dot"></span><strong>Account Management:</strong> Create, view, and
+                  manage multiple bank accounts with ease.</li>
+                <li><span class="feature-dot theme3-dot"></span><strong>Fund Transfers:</strong> Instant transfers
+                  between accounts with real-time balance updates.</li>
+                <li><span class="feature-dot theme3-dot"></span><strong>Transaction History:</strong> Detailed,
+                  filterable logs of all financial activity.</li>
+                <li><span class="feature-dot theme3-dot"></span><strong>Secure Auth:</strong> Session-based login system
+                  with phpMyAdmin &amp; MySQL backend.</li>
+              </ul>
+              <div class="project-tech">
+                <span class="tech-badge theme3-badge">HTML</span>
+                <span class="tech-badge theme3-badge">CSS</span>
+                <span class="tech-badge theme3-badge">JavaScript</span>
+                <span class="tech-badge theme3-badge">PHP</span>
+                <span class="tech-badge theme3-badge">MySQL</span>
+                <span class="tech-badge theme3-badge">phpMyAdmin</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== JOURNEY ===== -->
+      <section class="section journey" id="journey">
+        <div class="section-orb orb-right" data-speed="0.85"></div>
+        <div class="section-orb orb-left" data-speed="1.2"></div>
+        <div class="container">
+          <div class="section-header">
+            <p class="section-label">Experience & Education</p>
+            <h2 class="section-title split-text">My <span class="gradient-text">Journey</span></h2>
+          </div>
+          <div class="timeline-item gsap-fade-up">
+            <div class="timeline-dot">🚀</div>
+            <div class="timeline-card glass-card">
+              <div class="timeline-meta">
+                <span class="timeline-type work">Experience</span>
+                <span class="timeline-date">2023 – Present</span>
+              </div>
+              <h3>Independent Developer</h3>
+              <h4>Freelance &amp; Personal Projects</h4>
+              <ul class="timeline-list">
+                <li>Designed and built robust full-stack applications like HexaCore and SleepAI to solve real-world
+                  problems.</li>
+                <li>Integrated AI and third-party APIs (Gemini, OpenRouter, OpenWeather) to build intelligent and
+                  dynamic platforms.</li>
+                <li>Self-driven learning of modern stacks including React, Node.js, and advanced CSS for high-end UI/UX
+                  designs.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="timeline-item gsap-fade-up">
+            <div class="timeline-dot">🎓</div>
+            <div class="timeline-card glass-card">
+              <div class="timeline-meta">
+                <span class="timeline-type edu">Education</span>
+                <span class="timeline-date">2023 – Present</span>
+              </div>
+              <h3>Bachelor's in Computer Science</h3>
+              <h4>HITEC University Taxila</h4>
+              <div class="edu-stats">
+                <span class="edu-stat">📚 6th Semester</span>
+                <span class="edu-stat-divider">·</span>
+                <span class="edu-stat">⭐ CGPA: <strong>3.11 / 4.0</strong></span>
+              </div>
+              <ul class="timeline-list">
+                <li>Specializing in Software Engineering, Web Technologies &amp; Data Structures.</li>
+                <li>Built multiple full-stack projects including an AI-integrated health tracking system.</li>
+                <li>Active problem solver with focus on DSA, OOP, and modern system design.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+    </div>
+    </section>
+
+    <!-- ===== CONTACT ===== -->
+    <section class="section contact" id="contact">
+      <div class="section-orb orb-bottom" data-speed="1.15"></div>
+      <div class="section-orb orb-left" data-speed="0.75"></div>
+      <div class="container">
+        <div class="section-header">
+          <p class="section-label">Get In Touch</p>
+          <h2 class="section-title split-text">Let's <span class="gradient-text">Connect!</span></h2>
+          <p class="section-sub">I'm currently open to new opportunities. Whether you have a question, a project idea,
+            or
+            just want to say hi — I'll get back to you!</p>
+        </div>
+        <div class="contact-grid">
+          <div class="contact-info">
+            <a href="mailto:mattirehman343@gmail.com" class="contact-card glass-card gsap-fade-up magnetic-btn">
+              <div class="contact-icon">📧</div>
+              <div>
+                <p class="contact-label">Email</p>
+                <p class="contact-value">mattirehman343@gmail.com</p>
+              </div>
+            </a>
+            <a href="https://github.com/Matti11281" target="_blank"
+              class="contact-card glass-card gsap-fade-up magnetic-btn">
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
+                  <path
+                    d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                </svg>
+              </div>
+              <div>
+                <p class="contact-label">GitHub</p>
+                <p class="contact-value">github.com/Matti11281</p>
+              </div>
+            </a>
+            <a href="#" class="contact-card glass-card gsap-fade-up magnetic-btn">
+              <div class="contact-icon">💼</div>
+              <div>
+                <p class="contact-label">LinkedIn</p>
+                <p class="contact-value">www.linkedin.com/in/matti-rehman343</p>
+              </div>
+            </a>
+          </div>
+          <form class="contact-form glass-card gsap-fade-up" id="contact-form">
+            <div class="form-group">
+              <label for="name">Your Name</label>
+              <input type="text" id="name" placeholder="John Doe" required />
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" placeholder="john@example.com" required />
+            </div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" rows="5" placeholder="Tell me about your project..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary full-width magnetic-btn" id="send-btn">
+              <span>Send a Message</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="22" y1="2" x2="11" y2="13" />
+                <polygon points="22 2 15 22 11 13 2 9 22 2" />
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+      <div class="container">
+        <p>Designed & Built with ❤️ by <span class="gradient-text">Matti Ur Rehman</span></p>
+        <p class="footer-sub">© 2025 All rights reserved.</p>
+      </div>
+    </footer>
+    </div>
+  </main>
+
+  <!-- Scroll to Top Button -->
+  <button id="scroll-to-top" class="magnetic-btn" aria-label="Scroll to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
+  <!-- GSAP & Plugins -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <!-- Lenis Smooth Scroll -->
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
+  <!-- SplitType for Text Animation -->
+  <script src="https://unpkg.com/split-type"></script>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

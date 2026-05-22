@@ -41,7 +41,7 @@ class TextScrambler {
   }
   
   setText(newText) {
-    const oldText = this.el.innerText;
+    const oldText = this.el.textContent.trim();
     const length = Math.max(oldText.length, newText.length);
     const promise = new Promise((resolve) => this.resolve = resolve);
     this.queue = [];
@@ -309,7 +309,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 6. INITIALIZE SCRAMBLERS ON TEXT ELEMENTS
   const scrambleEls = document.querySelectorAll('.nav-link, .hero-headline, .project-title, .timeline-card h3, .about-card h3');
   scrambleEls.forEach(el => {
-    const originalText = el.innerText;
+    const originalText = el.textContent.trim();
     const scrambler = new TextScrambler(el);
     el.addEventListener('mouseenter', () => {
       scrambler.setText(originalText);

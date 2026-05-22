@@ -1,6 +1,6 @@
 /**
  * WORLD-CLASS PORTFOLIO ANIMATIONS
- * Powered by GSAP, ScrollTrigger, Lenis, and SplitType
+ * Powered by GSAP, ScrollTrigger, Lenis, SplitType & Interactive Physics
  */
 
 // 1. REGISTER GSAP PLUGINS
@@ -32,28 +32,92 @@ gsap.ticker.add((time) => {
 });
 gsap.ticker.lagSmoothing(0, 0);
 
-// 3. PRELOADER & TEXT SPLITTING
+// 3. TEXT SCRAMBLE / CYBER GLITCH EFFECT CLASS
+class TextScrambler {
+  constructor(el) {
+    this.el = el;
+    this.chars = '!<>-_\\/[]{}—=+*^?#________';
+    this.update = this.update.bind(this);
+  }
+  
+  setText(newText) {
+    const oldText = this.el.innerText;
+    const length = Math.max(oldText.length, newText.length);
+    const promise = new Promise((resolve) => this.resolve = resolve);
+    this.queue = [];
+    
+    for (let i = 0; i < length; i++) {
+      const from = oldText[i] || '';
+      const to = newText[i] || '';
+      const start = Math.floor(Math.random() * 20);
+      const end = start + Math.floor(Math.random() * 20);
+      this.queue.push({ from, to, start, end });
+    }
+    
+    cancelAnimationFrame(this.frameRequest);
+    this.frame = 0;
+    this.update();
+    return promise;
+  }
+  
+  update() {
+    let output = '';
+    let complete = 0;
+    
+    for (let i = 0, n = this.queue.length; i < n; i++) {
+      let { from, to, start, end, char } = this.queue[i];
+      if (this.frame >= end) {
+        complete++;
+        output += to;
+      } else if (this.frame >= start) {
+        if (!char || Math.random() < 0.28) {
+          char = this.randomChar();
+          this.queue[i].char = char;
+        }
+        output += `<span class="scramble-char" style="color:var(--accent-cyan);opacity:0.8">${char}</span>`;
+      } else {
+        output += from;
+      }
+    }
+    
+    this.el.innerHTML = output;
+    
+    if (complete === this.queue.length) {
+      this.resolve();
+    } else {
+      this.frameRequest = requestAnimationFrame(this.update);
+      this.frame++;
+    }
+  }
+  
+  randomChar() {
+    return this.chars[Math.floor(Math.random() * this.chars.length)];
+  }
+}
+
+// 4. PRELOADER & INTERACTIVE COMPONENTS LOAD
 document.addEventListener("DOMContentLoaded", () => {
 
-  // Split text into characters for advanced animation
+  // Split text into characters for advanced entry animation
   const splitTexts = document.querySelectorAll('.split-text');
   const splits = [];
 
   splitTexts.forEach(text => {
     // Make visible right before splitting to avoid FOUC
     text.style.visibility = 'visible';
+    text.style.opacity = '1';
     const split = new SplitType(text, { types: 'words, chars' });
     splits.push(split);
 
-    // Set initial state for characters
+    // Set initial state for characters (fade/skew transition in)
     gsap.set(split.chars, {
-      y: 50,
+      y: 40,
       opacity: 0,
       rotateX: -90
     });
   });
 
-  // INITIAL HERO ANIMATION (Timeline)
+  // INITIAL HERO ANIMATION TIMELINE
   const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
   tl.to('.navbar', {
@@ -71,7 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
       y: 0,
       opacity: 1,
       rotateX: 0,
-      stagger: 0.02,
+      stagger: 0.025,
       duration: 1
     }, "-=0.6")
     .to(splits[1].chars, { // "Full-Stack Developer"
@@ -82,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
       duration: 0.8
     }, "-=0.8")
     .fromTo('.hero-sub',
-      { y: 30, opacity: 0 },
+      { y: 25, opacity: 0 },
       { y: 0, opacity: 1, duration: 1 },
       "-=0.6"
     )
@@ -92,24 +156,24 @@ document.addEventListener("DOMContentLoaded", () => {
       "-=0.8"
     )
     .fromTo('.hero-stats',
-      { opacity: 0, scale: 0.9 },
+      { opacity: 0, scale: 0.95 },
       { opacity: 1, scale: 1, duration: 1, onComplete: triggerCounters },
       "-=0.5"
     )
     .fromTo('.hero-avatar-wrapper',
-      { scale: 0.8, opacity: 0, rotation: -10 },
-      { scale: 1, opacity: 1, rotation: 0, duration: 1.5, ease: "elastic.out(1, 0.5)" },
+      { scale: 0.85, opacity: 0, rotation: -8 },
+      { scale: 1, opacity: 1, rotation: 0, duration: 1.5, ease: "elastic.out(1, 0.6)" },
       "-=1.5"
     )
     .fromTo('.floating-badge',
       { scale: 0, opacity: 0 },
-      { scale: 1, opacity: 1, stagger: 0.1, duration: 0.8, ease: "back.out(1.7)" },
-      "-=1"
+      { scale: 1, opacity: 1, stagger: 0.08, duration: 0.8, ease: "back.out(1.7)" },
+      "-=1.2"
     );
 
-  // 4. SCROLL ANIMATIONS
+  // 5. SCROLL TRIGGER ANIMS
 
-  // Animate Section Titles on Scroll
+  // Animate non-hero Section Titles on Scroll
   splits.slice(2).forEach(split => {
     gsap.to(split.chars, {
       scrollTrigger: {
@@ -119,7 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
       y: 0,
       opacity: 1,
       rotateX: 0,
-      stagger: 0.02,
+      stagger: 0.018,
       duration: 0.8,
       ease: "power3.out"
     });
@@ -128,13 +192,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // Fade Up Elements (Cards, Tags, Timeline items)
   const fadeUpElements = gsap.utils.toArray('.gsap-fade-up');
   fadeUpElements.forEach(el => {
-    gsap.set(el, { visibility: 'visible', y: 50, opacity: 0 });
+    gsap.set(el, { visibility: 'visible', opacity: 0, y: 40 });
 
     gsap.to(el, {
       scrollTrigger: {
         trigger: el,
         start: "top 85%",
-        toggleActions: "play none none reverse" // Allows replaying when scrolling back up
+        toggleActions: "play none none reverse"
       },
       y: 0,
       opacity: 1,
@@ -143,12 +207,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Skill Tags Cascade
+  // Skill Tags Cascade Trigger
   const skillCategories = document.querySelectorAll('.skill-category');
   skillCategories.forEach(cat => {
     const tags = cat.querySelectorAll('.skill-tag');
     gsap.fromTo(tags,
-      { y: 20, opacity: 0, scale: 0.9 },
+      { y: 15, opacity: 0, scale: 0.9 },
       {
         scrollTrigger: {
           trigger: cat,
@@ -157,9 +221,9 @@ document.addEventListener("DOMContentLoaded", () => {
         y: 0,
         opacity: 1,
         scale: 1,
-        stagger: 0.05,
-        duration: 0.6,
-        ease: "back.out(1.5)"
+        stagger: 0.04,
+        duration: 0.55,
+        ease: "back.out(1.4)"
       }
     );
   });
@@ -168,7 +232,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const parallaxElements = document.querySelectorAll('[data-speed]');
   parallaxElements.forEach(el => {
     const speed = parseFloat(el.getAttribute('data-speed'));
-    // Calculate movement based on speed. speed 1 = normal, > 1 = faster, < 1 = slower
     gsap.to(el, {
       y: () => (1 - speed) * ScrollTrigger.maxScroll(window),
       ease: "none",
@@ -189,20 +252,20 @@ document.addEventListener("DOMContentLoaded", () => {
       trigger: "body",
       start: "top top",
       end: "bottom bottom",
-      scrub: 0.3
+      scrub: 0.2
     }
   });
 
-  // Navbar Background Blur on Scroll
+  // Navbar Background Blur on Scroll Trigger
   ScrollTrigger.create({
     trigger: "body",
-    start: "50px top",
+    start: "40px top",
     toggleClass: { targets: ".navbar", className: "scrolled" }
   });
 
-  // Scroll to Top Button Visibility
+  // Scroll to Top Button Visibility Trigger
   ScrollTrigger.create({
-    trigger: "#about", // Show when about section is reached
+    trigger: "#about",
     start: "top center",
     toggleClass: { targets: "#scroll-to-top", className: "visible" }
   });
@@ -242,21 +305,142 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+
+  // 6. INITIALIZE SCRAMBLERS ON TEXT ELEMENTS
+  const scrambleEls = document.querySelectorAll('.nav-link, .hero-headline, .project-title, .timeline-card h3, .about-card h3');
+  scrambleEls.forEach(el => {
+    const originalText = el.innerText;
+    const scrambler = new TextScrambler(el);
+    el.addEventListener('mouseenter', () => {
+      scrambler.setText(originalText);
+    });
+  });
+
+  // 7. DYNAMICALLY MAP BRAND COLORS TO SKILLS TAGS
+  const techColors = {
+    'react.js': '#61daf5',
+    'react': '#61daf5',
+    'javascript': '#f7df1e',
+    'html5': '#e34f26',
+    'css3': '#1572b6',
+    'tailwind css': '#38bdf8',
+    'node.js': '#339933',
+    'express.js': '#a855f7',
+    'restful apis': '#06b6d4',
+    'python': '#3776ab',
+    'mongodb': '#47a248',
+    'mysql': '#f29111',
+    'xampp': '#fb7185',
+    'mongodb atlas': '#47a248',
+    'git & github': '#f05032',
+    'vercel': '#c084fc',
+    'railway': '#00ffff',
+    'supabase': '#3ecf8e',
+    'openai api': '#10a37f',
+    'recharts': '#ff7300',
+    'jwt auth': '#f43f5e',
+    'figma': '#f24e1e',
+    'vs code': '#007acc'
+  };
+
+  const skillTags = document.querySelectorAll('.skill-tag');
+  skillTags.forEach(tag => {
+    const name = tag.textContent.trim().toLowerCase();
+    const color = techColors[name] || '#06b6d4';
+    tag.style.setProperty('--tech-color', color);
+  });
+
+  // 8. FORM FLOATING LABELS TRIGGERS
+  const formGroups = document.querySelectorAll('.form-group');
+  formGroups.forEach(group => {
+    const input = group.querySelector('input, textarea');
+    if (input) {
+      if (input.value.trim() !== '') {
+        group.classList.add('filled');
+      }
+
+      input.addEventListener('focus', () => {
+        group.classList.add('focused');
+      });
+
+      input.addEventListener('blur', () => {
+        group.classList.remove('focused');
+        if (input.value.trim() !== '') {
+          group.classList.add('filled');
+        } else {
+          group.classList.remove('filled');
+        }
+      });
+
+      input.addEventListener('input', () => {
+        if (input.value.trim() !== '') {
+          group.classList.add('filled');
+        } else {
+          group.classList.remove('filled');
+        }
+      });
+    }
+  });
+
+  // 9. DYNAMIC SCROLL PROGRESS FOR JOURNEY TIMELINE
+  const journeySection = document.querySelector('.journey');
+  if (journeySection) {
+    const container = journeySection.querySelector('.container');
+    if (container) {
+      const progressLine = document.createElement('div');
+      progressLine.className = 'timeline-progress-line';
+      container.appendChild(progressLine);
+
+      gsap.fromTo(progressLine,
+        { height: "0%" },
+        {
+          height: "83%",
+          ease: "none",
+          scrollTrigger: {
+            trigger: journeySection,
+            start: "top 30%",
+            end: "bottom 60%",
+            scrub: true
+          }
+        }
+      );
+    }
+  }
+
+  // 10. BUTTON CLICK RIPPLES EFFECT
+  const rippleElements = document.querySelectorAll('.btn, .project-link-btn, .nav-cta, #scroll-to-top');
+  rippleElements.forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple-circle';
+      ripple.style.left = `${x}px`;
+      ripple.style.top = `${y}px`;
+
+      btn.appendChild(ripple);
+
+      setTimeout(() => {
+        ripple.remove();
+      }, 800);
+    });
+  });
 });
 
-// 5. MAGNETIC BUTTONS EFFECT
+// 11. MAGNETIC BUTTONS EFFECT
 const magneticElements = document.querySelectorAll('.magnetic-btn');
-
 magneticElements.forEach(el => {
   el.addEventListener('mousemove', (e) => {
     const rect = el.getBoundingClientRect();
-    const x = (e.clientX - rect.left - rect.width / 2) * 0.3;
-    const y = (e.clientY - rect.top - rect.height / 2) * 0.3;
+    const x = (e.clientX - rect.left - rect.width / 2) * 0.35;
+    const y = (e.clientY - rect.top - rect.height / 2) * 0.35;
 
     gsap.to(el, {
       x: x,
       y: y,
-      duration: 0.4,
+      duration: 0.35,
       ease: "power2.out"
     });
   });
@@ -265,36 +449,82 @@ magneticElements.forEach(el => {
     gsap.to(el, {
       x: 0,
       y: 0,
-      duration: 0.7,
+      duration: 0.8,
       ease: "elastic.out(1, 0.3)"
     });
   });
 });
 
-// 6. CUSTOM CURSOR
+// 12. 3D CARD PERSPECTIVE TILT & Specular Glare
+const cards = document.querySelectorAll('.glass-card');
+cards.forEach(card => {
+  // Inject holographic specular glare overlay
+  if (!card.querySelector('.holo-glare')) {
+    const glare = document.createElement('div');
+    glare.className = 'holo-glare';
+    card.appendChild(glare);
+  }
+
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // Normalize coordinates (-0.5 to 0.5)
+    const xc = ((x / rect.width) - 0.5);
+    const yc = ((y / rect.height) - 0.5);
+
+    // Dynamic HSL positioning custom properties
+    card.style.setProperty('--mouse-x', `${(x / rect.width) * 100}%`);
+    card.style.setProperty('--mouse-y', `${(y / rect.height) * 100}%`);
+
+    // Dynamic rotation transformations
+    const rotateX = yc * -15; // Max X rotation
+    const rotateY = xc * 15;  // Max Y rotation
+
+    gsap.to(card, {
+      rotateX: rotateX,
+      rotateY: rotateY,
+      transformPerspective: 1000,
+      duration: 0.35,
+      ease: "power2.out"
+    });
+  });
+
+  card.addEventListener('mouseleave', () => {
+    gsap.to(card, {
+      rotateX: 0,
+      rotateY: 0,
+      duration: 0.65,
+      ease: "power3.out"
+    });
+  });
+});
+
+// 13. MOUSE TRACKING CURSOR
 const cursor = document.getElementById('cursor');
 const follower = document.getElementById('cursor-follower');
 
-if (cursor && follower) {
-  let cx = 0, cy = 0;
-  let fx = 0, fy = 0;
+let cx = 0, cy = 0;
+let fx = 0, fy = 0;
 
+if (cursor && follower) {
   window.addEventListener('mousemove', e => {
     cx = e.clientX;
     cy = e.clientY;
-
-    // Immediate cursor update
+    
+    // Immediate cursor coordinates update
     gsap.to(cursor, { x: cx, y: cy, duration: 0 });
   });
 
-  // Smooth follower update
+  // Interpolated follower movement for premium weight feel
   gsap.ticker.add(() => {
     fx += (cx - fx) * 0.15;
     fy += (cy - fy) * 0.15;
     gsap.set(follower, { x: fx, y: fy });
   });
 
-  // Hover states
+  // Bind hover updates
   const hoverElements = document.querySelectorAll('a, button, .glass-card, .skill-tag');
   hoverElements.forEach(el => {
     el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
@@ -302,15 +532,15 @@ if (cursor && follower) {
   });
 }
 
-// 7. COUNTER ANIMATION
+// 14. COUNTER COUNTS ANIMATION
 function triggerCounters() {
   const counters = document.querySelectorAll('.stat-num');
   counters.forEach(counter => {
     const target = parseInt(counter.getAttribute('data-target'));
     gsap.to(counter, {
       innerHTML: target,
-      duration: 2,
-      ease: "power2.out",
+      duration: 2.2,
+      ease: "power3.out",
       snap: { innerHTML: 1 },
       onUpdate: function () {
         counter.innerHTML = Math.ceil(this.targets()[0].innerHTML);
@@ -318,7 +548,8 @@ function triggerCounters() {
     });
   });
 }
-// 8. HAMBURGER MENU
+
+// 15. MOBILE MENU HAMBURGER SWITCH
 const hamburger = document.getElementById('hamburger');
 const navLinks = document.getElementById('nav-links');
 
@@ -327,15 +558,41 @@ hamburger.addEventListener('click', () => {
   navLinks.classList.toggle('open');
 });
 
-// 9. OPTIMIZED PARTICLES CANVAS
+// 16. CANVAS BACKGROUND PARTICLES & Trail Unified Particles
 const canvas = document.getElementById('particles-canvas');
 if (canvas) {
   const ctx = canvas.getContext('2d');
   let particles = [];
+  let trailParticles = [];
   let W, H;
 
-  // Reduce particle count on mobile for performance
-  const particleCount = window.innerWidth < 768 ? 30 : 60;
+  // Adapt particle density depending on mobile
+  const particleCount = window.innerWidth < 768 ? 25 : 55;
+
+  let mouse = { x: null, y: null, radius: 140 };
+
+  window.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+
+    // Unified cursor trail generation
+    if (Math.random() < 0.45) {
+      trailParticles.push({
+        x: e.clientX,
+        y: e.clientY,
+        r: Math.random() * 2.5 + 1.2,
+        alpha: 0.8,
+        dx: (Math.random() - 0.5) * 1.5,
+        dy: (Math.random() - 0.5) * 1.5,
+        color: Math.random() > 0.5 ? '139,92,246' : '6,182,212'
+      });
+    }
+  });
+
+  window.addEventListener('mouseout', () => {
+    mouse.x = null;
+    mouse.y = null;
+  });
 
   function resize() {
     W = canvas.width = window.innerWidth;
@@ -348,10 +605,10 @@ if (canvas) {
     return {
       x: Math.random() * W,
       y: Math.random() * H,
-      r: Math.random() * 1.5 + 0.3,
-      dx: (Math.random() - 0.5) * 0.3,
-      dy: (Math.random() - 0.5) * 0.3,
-      alpha: Math.random() * 0.4 + 0.1,
+      r: Math.random() * 1.6 + 0.4,
+      dx: (Math.random() - 0.5) * 0.25,
+      dy: (Math.random() - 0.5) * 0.25,
+      alpha: Math.random() * 0.35 + 0.1,
       color: Math.random() > 0.5 ? '139,92,246' : '6,182,212'
     };
   }
@@ -360,43 +617,88 @@ if (canvas) {
 
   function drawParticles() {
     ctx.clearRect(0, 0, W, H);
+
+    // Draw background particles
     particles.forEach(p => {
+      // Mouse gravity interactive physics
+      if (mouse.x !== null && mouse.y !== null) {
+        const dx = mouse.x - p.x;
+        const dy = mouse.y - p.y;
+        const distSq = dx * dx + dy * dy;
+        const dist = Math.sqrt(distSq);
+
+        if (dist < mouse.radius) {
+          const force = (mouse.radius - dist) / mouse.radius; // scale 0 to 1
+          // Attract particles slowly to mouse coordinates
+          p.x += (dx / dist) * force * 0.65;
+          p.y += (dy / dist) * force * 0.65;
+
+          // Connect interactive web fibers to cursor
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.strokeStyle = `rgba(${p.color}, ${0.1 * force})`;
+          ctx.lineWidth = 0.4;
+          ctx.stroke();
+        }
+      }
+
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
       ctx.fillStyle = `rgba(${p.color},${p.alpha})`;
       ctx.fill();
 
+      // Move particles
       p.x += p.dx;
       p.y += p.dy;
 
+      // Bounce limits
       if (p.x < 0 || p.x > W) p.dx *= -1;
       if (p.y < 0 || p.y > H) p.dy *= -1;
     });
 
-    // Draw connections only if less than distance
+    // Draw connections between neighboring background particles
     for (let i = 0; i < particles.length; i++) {
       for (let j = i + 1; j < particles.length; j++) {
         const dx = particles[i].x - particles[j].x;
         const dy = particles[i].y - particles[j].y;
-        const distSq = dx * dx + dy * dy; // Use squared distance for performance
+        const distSq = dx * dx + dy * dy;
 
-        if (distSq < 10000) { // 100^2
+        if (distSq < 9000) { // 95px distance max
           const dist = Math.sqrt(distSq);
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
           ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(139,92,246,${0.05 * (1 - dist / 100)})`;
+          ctx.strokeStyle = `rgba(139,92,246,${0.065 * (1 - dist / 95)})`;
           ctx.lineWidth = 0.5;
           ctx.stroke();
         }
       }
     }
+
+    // Process and draw mouse trail particles
+    for (let i = trailParticles.length - 1; i >= 0; i--) {
+      const p = trailParticles[i];
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${p.color}, ${p.alpha})`;
+      ctx.fill();
+
+      p.x += p.dx;
+      p.y += p.dy;
+      p.alpha -= 0.022; // fade particle speed
+
+      if (p.alpha <= 0) {
+        trailParticles.splice(i, 1);
+      }
+    }
+
     requestAnimationFrame(drawParticles);
   }
   drawParticles();
 }
 
-// 10. CONTACT FORM SUBMISSION
+// 17. CONTACT FORM SUBMISSION WITH PREMIUM SUCCESS FEEDBACK
 const form = document.getElementById('contact-form');
 const sendBtn = document.getElementById('send-btn');
 if (form) {
@@ -411,18 +713,23 @@ if (form) {
     sendBtn.innerHTML = '<span>Sending...</span>';
     sendBtn.disabled = true;
 
-    // Simulate API call
+    // Simulate backend response
     setTimeout(() => {
       gsap.to(sendBtn, {
-        backgroundColor: '#10b981', // Success green
+        backgroundColor: '#10b981',
         duration: 0.3
       });
       sendBtn.innerHTML = '<span>✅ Message Sent!</span>';
       form.reset();
 
+      // Clear input focused classes
+      document.querySelectorAll('.form-group').forEach(group => {
+        group.classList.remove('focused', 'filled');
+      });
+
       setTimeout(() => {
         gsap.to(sendBtn, {
-          backgroundColor: '', // Reset to default
+          backgroundColor: '',
           clearProps: "backgroundColor",
           duration: 0.3
         });

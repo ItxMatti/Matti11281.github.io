@@ -283,82 +283,23 @@ document.addEventListener("DOMContentLoaded", () => {
         lenis.scrollTo(target, { duration: 1.2, offset: -50 });
 
         // Close mobile menu if open
-        document.getElementById('nav-links').classList.remove('open');
-        document.getElementById('hamburger').classList.remove('active');
-      }
-    });
-  });
-
-  // Active Nav Link Update
-  const sections = document.querySelectorAll('section[id]');
-  sections.forEach(sec => {
-    ScrollTrigger.create({
-      trigger: sec,
-      start: "top 50%",
-      end: "bottom 50%",
-      onToggle: self => {
-        if (self.isActive) {
-          document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-          const link = document.querySelector(`.nav-link[href="#${sec.id}"]`);
-          if (link) link.classList.add('active');
+        const navLinks = document.getElementById('nav-links');
+        const hamburger = document.getElementById('hamburger');
+        if (navLinks && hamburger) {
+          navLinks.classList.remove('open');
+          hamburger.classList.remove('active');
         }
       }
     });
   });
 
-  // 6. INITIALIZE SCRAMBLERS ON TEXT ELEMENTS
-  const scrambleEls = document.querySelectorAll('.nav-link, .hero-headline, .project-title, .timeline-card h3, .about-card h3');
-  scrambleEls.forEach(el => {
-    const originalText = el.textContent.trim();
-    const scrambler = new TextScrambler(el);
-    el.addEventListener('mouseenter', () => {
-      scrambler.setText(originalText);
-    });
-  });
-
-  // 7. DYNAMICALLY MAP BRAND COLORS TO SKILLS TAGS
-  const techColors = {
-    'react.js': '#61daf5',
-    'react': '#61daf5',
-    'javascript': '#f7df1e',
-    'html5': '#e34f26',
-    'css3': '#1572b6',
-    'tailwind css': '#38bdf8',
-    'node.js': '#339933',
-    'express.js': '#a855f7',
-    'restful apis': '#06b6d4',
-    'python': '#3776ab',
-    'mongodb': '#47a248',
-    'mysql': '#f29111',
-    'xampp': '#fb7185',
-    'mongodb atlas': '#47a248',
-    'git & github': '#f05032',
-    'vercel': '#c084fc',
-    'railway': '#00ffff',
-    'supabase': '#3ecf8e',
-    'openai api': '#10a37f',
-    'recharts': '#ff7300',
-    'jwt auth': '#f43f5e',
-    'figma': '#f24e1e',
-    'vs code': '#007acc'
-  };
-
-  const skillTags = document.querySelectorAll('.skill-tag');
-  skillTags.forEach(tag => {
-    const name = tag.textContent.trim().toLowerCase();
-    const color = techColors[name] || '#06b6d4';
-    tag.style.setProperty('--tech-color', color);
-  });
-
-  // 8. FORM FLOATING LABELS TRIGGERS
+  // 6. FLOATING LABEL FORM CONTROL (Premium State Management)
   const formGroups = document.querySelectorAll('.form-group');
+
   formGroups.forEach(group => {
     const input = group.querySelector('input, textarea');
+    
     if (input) {
-      if (input.value.trim() !== '') {
-        group.classList.add('filled');
-      }
-
       input.addEventListener('focus', () => {
         group.classList.add('focused');
       });
@@ -379,80 +320,130 @@ document.addEventListener("DOMContentLoaded", () => {
           group.classList.remove('filled');
         }
       });
+
+      // Check initial state
+      if (input.value.trim() !== '') {
+        group.classList.add('filled');
+      }
     }
   });
 
-  // 9. DYNAMIC SCROLL PROGRESS FOR JOURNEY TIMELINE
-  const journeySection = document.querySelector('.journey');
-  if (journeySection) {
-    const container = journeySection.querySelector('.container');
-    if (container) {
-      const progressLine = document.createElement('div');
-      progressLine.className = 'timeline-progress-line';
-      container.appendChild(progressLine);
+  // 7. MAGNETIC BUTTON EFFECT
+  const magneticButtons = document.querySelectorAll('.magnetic-btn');
 
-      gsap.fromTo(progressLine,
-        { height: "0%" },
-        {
-          height: "83%",
-          ease: "none",
-          scrollTrigger: {
-            trigger: journeySection,
-            start: "top 30%",
-            end: "bottom 60%",
-            scrub: true
-          }
-        }
-      );
-    }
-  }
+  magneticButtons.forEach(btn => {
+    btn.addEventListener('mousemove', (e) => {
+      if (window.innerWidth < 768) return; // Disable on mobile
 
-  // 10. BUTTON CLICK RIPPLES EFFECT
-  const rippleElements = document.querySelectorAll('.btn, .project-link-btn, .nav-cta, #scroll-to-top');
-  rippleElements.forEach(btn => {
-    btn.addEventListener('click', function(e) {
       const rect = btn.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
 
-      const ripple = document.createElement('span');
-      ripple.className = 'ripple-circle';
-      ripple.style.left = `${x}px`;
-      ripple.style.top = `${y}px`;
-
-      btn.appendChild(ripple);
-
-      setTimeout(() => {
-        ripple.remove();
-      }, 800);
+      gsap.to(btn, {
+        x: x * 0.25,
+        y: y * 0.25,
+        duration: 0.3,
+        ease: "power2.out",
+        overwrite: 'auto'
+      });
     });
-  });
-});
 
-// 11. MAGNETIC BUTTONS EFFECT
-const magneticElements = document.querySelectorAll('.magnetic-btn');
-magneticElements.forEach(el => {
-  el.addEventListener('mousemove', (e) => {
-    const rect = el.getBoundingClientRect();
-    const x = (e.clientX - rect.left - rect.width / 2) * 0.35;
-    const y = (e.clientY - rect.top - rect.height / 2) * 0.35;
-
-    gsap.to(el, {
-      x: x,
-      y: y,
-      duration: 0.35,
-      ease: "power2.out"
+    btn.addEventListener('mouseleave', () => {
+      gsap.to(btn, {
+        x: 0,
+        y: 0,
+        duration: 0.6,
+        ease: "elastic.out(1, 0.3)",
+        overwrite: 'auto'
+      });
     });
   });
 
-  el.addEventListener('mouseleave', () => {
-    gsap.to(el, {
-      x: 0,
-      y: 0,
-      duration: 0.8,
-      ease: "elastic.out(1, 0.3)"
+  // 8. RIPPLE CLICK EFFECT (for buttons)
+  const buttons = document.querySelectorAll('.btn, .contact-card, .skill-tag');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', function (e) {
+      if (this.closest('.contact-form')) return; // Skip form buttons
+
+      const ripple = document.createElement('div');
+      const rect = this.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      const x = e.clientX - rect.left - size / 2;
+      const y = e.clientY - rect.top - size / 2;
+
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = x + 'px';
+      ripple.style.top = y + 'px';
+      ripple.className = 'ripple';
+
+      this.appendChild(ripple);
+
+      setTimeout(() => ripple.remove(), 600);
     });
   });
+
+  // 9. HOVER ELEVATION EFFECT
+  const hoverElements = document.querySelectorAll('.glass-card, .about-card, .skill-category, .project-card');
+
+  hoverElements.forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      gsap.to(el, {
+        y: -5,
+        duration: 0.3,
+        ease: "power2.out",
+        overwrite: 'auto'
+      });
+    });
+
+    el.addEventListener('mouseleave', () => {
+      gsap.to(el, {
+        y: 0,
+        duration: 0.5,
+        ease: "power3.out",
+        overwrite: 'auto'
+      });
+    });
+  });
+
+  // 10. SCROLL ANIMATION FOR SECTION ELEMENTS
+  const sectionOrbs = document.querySelectorAll('.section-orb');
+
+  sectionOrbs.forEach(orb => {
+    gsap.fromTo(orb,
+      { opacity: 0, scale: 0.8 },
+      {
+        scrollTrigger: {
+          trigger: orb.closest('.section'),
+          start: "top 70%",
+        },
+        opacity: 0.2,
+        scale: 1,
+        duration: 1.2,
+        ease: "power2.out"
+      }
+    );
+  });
+
+  // 11. FLOATING ANIMATION TRIGGER ON SCROLL
+  const floatingElements = document.querySelectorAll('[data-speed]');
+
+  floatingElements.forEach(el => {
+    const originalY = gsap.getProperty(el, 'y');
+    gsap.fromTo(el,
+      { y: 30 },
+      {
+        y: 0,
+        scrollTrigger: {
+          trigger: el.closest('.section'),
+          start: "top 60%",
+        },
+        duration: 1.5,
+        ease: "power2.out"
+      }
+    );
+  });
+
 });
 
 // 12. 3D CARD PERSPECTIVE TILT & Specular Glare
@@ -466,6 +457,8 @@ cards.forEach(card => {
   }
 
   card.addEventListener('mousemove', (e) => {
+    if (window.innerWidth < 768) return; // Disable on mobile
+
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -553,10 +546,20 @@ function triggerCounters() {
 const hamburger = document.getElementById('hamburger');
 const navLinks = document.getElementById('nav-links');
 
-hamburger.addEventListener('click', () => {
-  hamburger.classList.toggle('active');
-  navLinks.classList.toggle('open');
-});
+if (hamburger && navLinks) {
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    navLinks.classList.toggle('open');
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.navbar')) {
+      hamburger.classList.remove('active');
+      navLinks.classList.remove('open');
+    }
+  });
+}
 
 // 16. CANVAS BACKGROUND PARTICLES & Trail Unified Particles
 const canvas = document.getElementById('particles-canvas');
@@ -701,41 +704,106 @@ if (canvas) {
 // 17. CONTACT FORM SUBMISSION WITH PREMIUM SUCCESS FEEDBACK
 const form = document.getElementById('contact-form');
 const sendBtn = document.getElementById('send-btn');
+
 if (form) {
-  form.addEventListener('submit', e => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
+
+    const formNotice = document.getElementById('form-notice');
     const name = document.getElementById('name').value.trim();
     const email = document.getElementById('email').value.trim();
     const message = document.getElementById('message').value.trim();
 
-    if (!name || !email || !message) return;
+    if (!name || !email || !message) {
+      showNotice('Please fill in all fields', 'error');
+      return;
+    }
 
     sendBtn.innerHTML = '<span>Sending...</span>';
     sendBtn.disabled = true;
 
-    // Simulate backend response
-    setTimeout(() => {
-      gsap.to(sendBtn, {
-        backgroundColor: '#10b981',
-        duration: 0.3
-      });
-      sendBtn.innerHTML = '<span>✅ Message Sent!</span>';
-      form.reset();
-
-      // Clear input focused classes
-      document.querySelectorAll('.form-group').forEach(group => {
-        group.classList.remove('focused', 'filled');
+    try {
+      // The form will be submitted to Formspree automatically
+      // We just need to show a nice success animation
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: {
+          'Accept': 'application/json'
+        }
       });
 
-      setTimeout(() => {
+      if (response.ok) {
         gsap.to(sendBtn, {
-          backgroundColor: '',
-          clearProps: "backgroundColor",
+          backgroundColor: '#10b981',
           duration: 0.3
         });
+        sendBtn.innerHTML = '<span>✅ Message Sent!</span>';
+        showNotice('Your message has been sent successfully! I\'ll get back to you soon.', 'success');
+        form.reset();
+
+        // Clear input focused classes
+        document.querySelectorAll('.form-group').forEach(group => {
+          group.classList.remove('focused', 'filled');
+        });
+
+        setTimeout(() => {
+          gsap.to(sendBtn, {
+            backgroundColor: '',
+            clearProps: "backgroundColor",
+            duration: 0.3
+          });
+          sendBtn.innerHTML = '<span>Send a Message</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
+          sendBtn.disabled = false;
+        }, 3000);
+      } else {
+        showNotice('There was an error. Please try again.', 'error');
         sendBtn.innerHTML = '<span>Send a Message</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
         sendBtn.disabled = false;
-      }, 3000);
-    }, 1500);
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      showNotice('There was an error sending your message. Please try again.', 'error');
+      sendBtn.innerHTML = '<span>Send a Message</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
+      sendBtn.disabled = false;
+    }
+  });
+
+  function showNotice(message, type) {
+    const notice = document.getElementById('form-notice');
+    if (notice) {
+      notice.textContent = message;
+      notice.style.display = 'block';
+      notice.style.color = type === 'success' ? 'var(--accent-cyan)' : '#ff6b6b';
+      
+      // Auto hide after 5 seconds
+      setTimeout(() => {
+        notice.style.display = 'none';
+      }, 5000);
+    }
+  }
+}
+
+// 18. VIEWPORT HEIGHT FIX FOR MOBILE (handles address bar)
+function setViewportHeight() {
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+setViewportHeight();
+window.addEventListener('resize', setViewportHeight);
+
+// 19. TOUCH OPTIMIZATION
+if (window.matchMedia('(pointer: coarse)').matches) {
+  // Add touch-specific optimizations
+  document.body.classList.add('touch-device');
+  
+  // Increase touch target sizes
+  const buttons = document.querySelectorAll('button, a');
+  buttons.forEach(btn => {
+    const rect = btn.getBoundingClientRect();
+    if (rect.width < 44 || rect.height < 44) {
+      btn.style.minWidth = '44px';
+      btn.style.minHeight = '44px';
+    }
   });
 }

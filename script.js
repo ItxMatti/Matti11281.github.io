@@ -163,20 +163,20 @@ function createWorld(renderer) {
   // Each section defines where Matti stands. Values lerp smoothly in the render loop.
   const poses = {
     desktop: {
-      hero:     { x: 1.95, y: -0.05, rot: -0.28, s: 1.0 },
-      about:    { x: -2.35, y: -0.1, rot: 0.55, s: 0.95 },
-      skills:   { x: -2.6, y: 4.8, rot: 0.4, s: 0.8 },
-      projects: { x: 2.4, y: 4.8, rot: -0.4, s: 0.8 },
-      journey:  { x: 2.45, y: -0.1, rot: -0.55, s: 0.95 },
-      contact:  { x: -2.45, y: -0.15, rot: 0.5, s: 0.95 },
+      hero:     { x: 2.55, y: -0.42, rot: -0.35, s: 0.9 },
+      about:    { x: -2.45, y: -0.35, rot: 0.5, s: 0.86 },
+      skills:   { x: -2.6, y: 4.2, rot: 0.4, s: 0.7 },
+      projects: { x: 2.4, y: 4.2, rot: -0.4, s: 0.7 },
+      journey:  { x: 2.5, y: -0.35, rot: -0.5, s: 0.86 },
+      contact:  { x: -2.5, y: -0.4, rot: 0.45, s: 0.86 },
     },
     mobile: {
-      hero:     { x: 0, y: 1.05, rot: 0, s: 0.62 },
-      about:    { x: 0, y: 4.2, rot: 0, s: 0.62 },
-      skills:   { x: 0, y: 4.2, rot: 0, s: 0.62 },
-      projects: { x: 0, y: 4.2, rot: 0, s: 0.62 },
-      journey:  { x: 0, y: 4.2, rot: 0, s: 0.62 },
-      contact:  { x: 0, y: 4.2, rot: 0, s: 0.62 },
+      hero:     { x: 0, y: 1.3, rot: 0, s: 0.78 },
+      about:    { x: 0, y: 4.2, rot: 0, s: 0.78 },
+      skills:   { x: 0, y: 4.2, rot: 0, s: 0.78 },
+      projects: { x: 0, y: 4.2, rot: 0, s: 0.78 },
+      journey:  { x: 0, y: 4.2, rot: 0, s: 0.78 },
+      contact:  { x: 0, y: 4.2, rot: 0, s: 0.78 },
     },
   };
   let scene_ = "hero";
@@ -313,8 +313,8 @@ function createWorld(renderer) {
     // ---- bubble follows head
     if (bubble.classList.contains("show")) {
       hero.head.getWorldPosition(headWorld);
-      headWorld.y += 0.55 * current.s;
-      headWorld.x += 0.25 * current.s;
+      headWorld.y += 0.72 * current.s;
+      headWorld.x += 0.2 * current.s;
       headWorld.project(camera);
       const bx = (headWorld.x * 0.5 + 0.5) * innerWidth;
       const by = (-headWorld.y * 0.5 + 0.5) * innerHeight;
@@ -341,29 +341,36 @@ function createWorld(renderer) {
 }
 
 /* =========================================================
-   3. PROCEDURAL 3D CHARACTER (modelled on Matti's photos:
-      swept black hair, full beard, burgundy 3-piece suit,
+   3. PROCEDURAL 3D CHARACTER (stylised, modelled on Matti's photos:
+      swept-back black hair, full beard, burgundy three-piece suit,
       white shirt, black tie, brown shoes, tan-strap watch)
    ========================================================= */
 function buildCharacter() {
-  const M = (color, roughness = 0.6, metalness = 0, extra = {}) =>
+  const ss = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+  const S = (color, roughness = 0.6, metalness = 0, extra = {}) =>
     new THREE.MeshStandardMaterial({ color, roughness, metalness, ...extra });
+  const fabric = (color, sheen) =>
+    new THREE.MeshPhysicalMaterial({ color, roughness: 0.72, sheen: 1, sheenColor: new THREE.Color(sheen), sheenRoughness: 0.45 });
   const mat = {
-    skin: M(0xd49c7c, 0.5),
-    skinDark: M(0x9c6650, 0.6),
-    suit: M(0x3d1a2b, 0.62, 0.05),
-    suitDark: M(0x2a1220, 0.7, 0, { side: THREE.DoubleSide }),
-    shirt: M(0xf5f4f8, 0.45, 0, { side: THREE.DoubleSide }),
-    tie: M(0x0b0b10, 0.3, 0.1),
-    hair: M(0x0c0b10, 0.55, 0.1),
-    beard: M(0x141016, 0.85, 0, { side: THREE.DoubleSide }),
-    shoe: M(0x4a2414, 0.28, 0.15),
-    eyeW: M(0xffffff, 0.25),
-    pupil: M(0x24150d, 0.15),
-    strap: M(0xc89a6c, 0.5),
-    steel: M(0xc9ccd4, 0.2, 1),
-    button: M(0x1a1a22, 0.3, 0.6),
-    platform: new THREE.MeshStandardMaterial({ color: 0x0d0b18, metalness: 0.9, roughness: 0.25 }),
+    skin: S(0x8a5439, 0.55, 0, { envMapIntensity: 0.5 }),
+    lip: S(0x6b2f2a, 0.45),
+    suit: fabric(0x3a1222, 0x7a3352),
+    lapel: fabric(0x2e0e1b, 0x8a3c5c),
+    vest: fabric(0x2c0d19, 0x5e2440),
+    shirt: S(0xf4f3f7, 0.42),
+    tie: S(0x0d0d12, 0.28, 0.1),
+    hair: S(0x0f0d12, 0.36, 0.05),
+    beard: S(0x18131a, 0.88),
+    shoe: S(0x5a2c16, 0.22, 0.12),
+    sole: S(0x1a110c, 0.7),
+    eyeW: S(0xffffff, 0.2),
+    iris: S(0x3d2416, 0.25),
+    pupil: S(0x050505, 0.1),
+    shine: new THREE.MeshBasicMaterial({ color: 0xffffff }),
+    strap: S(0xb98a5c, 0.5),
+    steel: S(0xd5d8e0, 0.18, 1),
+    button: S(0x1d1018, 0.3, 0.5),
+    platform: S(0x0d0b18, 0.25, 0.9),
   };
   const mesh = (geo, m, parent, x = 0, y = 0, z = 0) => {
     const o = new THREE.Mesh(geo, m);
@@ -371,233 +378,296 @@ function buildCharacter() {
     parent.add(o);
     return o;
   };
+  const lathe = (pts, seg = 48) => new THREE.LatheGeometry(pts.map(([r, y]) => new THREE.Vector2(r, y)), seg);
+  const tube = (pts, r, seg = 24) => new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts.map((p) => new THREE.Vector3(...p))), seg, r, 8, false);
+  const flat = (pts, depth = 0.012, bevel = 0.004) => {
+    const sh = new THREE.Shape();
+    pts.forEach(([x, y], i) => (i ? sh.lineTo(x, y) : sh.moveTo(x, y)));
+    sh.closePath();
+    return new THREE.ExtrudeGeometry(sh, { depth, bevelEnabled: true, bevelThickness: bevel, bevelSize: bevel, bevelSegments: 2, curveSegments: 6 });
+  };
+  // a sphere whose surface is sculpted by fn(unitDir) -> radius multiplier (+ optional offset)
+  const sculpt = (R, fn, w = 72, h = 56) => {
+    const g = new THREE.SphereGeometry(1, w, h);
+    const p = g.attributes.position, v = new THREE.Vector3();
+    for (let i = 0; i < p.count; i++) {
+      v.fromBufferAttribute(p, i).normalize();
+      const out = fn(v.clone());
+      p.setXYZ(i, out.x * R, out.y * R, out.z * R);
+    }
+    g.computeVertexNormals();
+    // smooth the UV seam normals
+    const n = g.attributes.normal, key = new Map();
+    for (let i = 0; i < p.count; i++) {
+      const k = `${p.getX(i).toFixed(4)},${p.getY(i).toFixed(4)},${p.getZ(i).toFixed(4)}`;
+      if (!key.has(k)) key.set(k, []);
+      key.get(k).push(i);
+    }
+    key.forEach((ids) => {
+      if (ids.length < 2) return;
+      const a = new THREE.Vector3();
+      ids.forEach((i) => a.add(v.fromBufferAttribute(n, i)));
+      a.normalize();
+      ids.forEach((i) => n.setXYZ(i, a.x, a.y, a.z));
+    });
+    return g;
+  };
 
   const root = new THREE.Group();     // positioned by scroll
-  const rig = new THREE.Group();      // origin at feet
-  rig.position.y = -1.3;
+  const rig = new THREE.Group();      // origin at the feet
+  rig.position.y = -0.95;
   root.add(rig);
 
   /* ---- glowing platform ---- */
   const plat = new THREE.Group();
   rig.add(plat);
-  mesh(new THREE.CylinderGeometry(0.75, 0.82, 0.08, 64), mat.platform, plat, 0, -0.04, 0);
-  const ringMat = new THREE.MeshBasicMaterial({ color: 0x22d3ee, transparent: true, opacity: 0.9 });
-  const ring1 = mesh(new THREE.TorusGeometry(0.79, 0.012, 8, 96), ringMat, plat, 0, 0.0, 0);
+  mesh(new THREE.CylinderGeometry(0.52, 0.57, 0.06, 64), mat.platform, plat, 0, -0.03, 0);
+  const ring1 = mesh(new THREE.TorusGeometry(0.55, 0.009, 8, 96), new THREE.MeshBasicMaterial({ color: 0x22d3ee, transparent: true, opacity: 0.9 }), plat);
   ring1.rotation.x = Math.PI / 2;
-  const ring2Mat = new THREE.MeshBasicMaterial({ color: 0x8b5cf6, transparent: true, opacity: 0.6 });
-  const ring2 = mesh(new THREE.TorusGeometry(1.05, 0.006, 8, 120), ring2Mat, plat, 0, -0.02, 0);
+  const ring2 = mesh(new THREE.TorusGeometry(0.74, 0.005, 8, 120), new THREE.MeshBasicMaterial({ color: 0x8b5cf6, transparent: true, opacity: 0.6 }), plat, 0, -0.02, 0);
   ring2.rotation.x = Math.PI / 2;
-  const glow = mesh(new THREE.PlaneGeometry(3.2, 3.2), new THREE.MeshBasicMaterial({ map: glowTexture(), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }), plat, 0, 0.005, 0);
+  const glow = mesh(new THREE.PlaneGeometry(2.3, 2.3), new THREE.MeshBasicMaterial({ map: glowTexture(), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }), plat, 0, 0.005, 0);
   glow.rotation.x = -Math.PI / 2;
-  const shadow = mesh(new THREE.PlaneGeometry(1.1, 1.1), new THREE.MeshBasicMaterial({ map: shadowTexture(), transparent: true, depthWrite: false }), plat, 0, 0.01, 0);
+  const shadow = mesh(new THREE.PlaneGeometry(0.8, 0.8), new THREE.MeshBasicMaterial({ map: shadowTexture(), transparent: true, depthWrite: false }), plat, 0, 0.01, 0);
   shadow.rotation.x = -Math.PI / 2;
-  // light beam
-  const beam = mesh(new THREE.CylinderGeometry(0.78, 0.78, 3.2, 48, 1, true),
-    new THREE.MeshBasicMaterial({ map: beamTexture(), transparent: true, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, opacity: 0.35 }), plat, 0, 1.6, 0);
+  const beam = mesh(new THREE.CylinderGeometry(0.54, 0.54, 2.2, 48, 1, true),
+    new THREE.MeshBasicMaterial({ map: beamTexture(), transparent: true, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, opacity: 0.3 }), plat, 0, 1.1, 0);
 
   /* ---- body (everything that hops) ---- */
   const body = new THREE.Group();
   rig.add(body);
 
-  // legs
+  // legs: tapered trousers + polished brogues
   const legs = [];
   [-1, 1].forEach((side) => {
     const hip = new THREE.Group();
-    hip.position.set(side * 0.13, 1.0, 0);
+    hip.position.set(side * 0.1, 0.6, 0);
     body.add(hip);
-    mesh(new THREE.CapsuleGeometry(0.105, 0.78, 8, 16), mat.suit, hip, 0, -0.47, 0);
-    // trouser crease
-    mesh(new THREE.BoxGeometry(0.008, 0.8, 0.01), mat.suitDark, hip, 0, -0.47, 0.104);
-    const shoe = mesh(new THREE.CapsuleGeometry(0.075, 0.17, 6, 12), mat.shoe, hip, 0, -0.93, 0.06);
-    shoe.rotation.x = Math.PI / 2;
-    shoe.scale.set(1.05, 1, 0.75);
+    mesh(lathe([[0, 0.05], [0.07, 0.045], [0.092, 0.01], [0.088, -0.22], [0.076, -0.48], [0.08, -0.52], [0, -0.52]], 32), mat.suit, hip);
+    const shoe = new THREE.Group();
+    shoe.position.set(0, -0.53, 0.025);
+    hip.add(shoe);
+    mesh(new THREE.SphereGeometry(0.07, 24, 16), mat.shoe, shoe, 0, -0.012, 0.03).scale.set(1, 0.62, 1.65);
+    mesh(new THREE.CylinderGeometry(0.068, 0.07, 0.018, 24), mat.sole, shoe, 0, -0.05, 0.03).scale.set(1, 1, 1.62);
     legs.push(hip);
   });
 
-  // torso (jacket)
+  // torso: tailored jacket (lathe) with the open front of a three-piece suit
   const torso = new THREE.Group();
-  torso.position.y = 1.0;
+  torso.position.y = 0.58;
   body.add(torso);
-  const pelvis = mesh(new THREE.CylinderGeometry(0.27, 0.25, 0.18, 32), mat.suit, torso, 0, 0.04, 0);
-  pelvis.scale.z = 0.7;
-  const chest = mesh(new THREE.CylinderGeometry(0.35, 0.27, 0.72, 40), mat.suit, torso, 0, 0.42, 0);
-  chest.scale.z = 0.66;
-  const shoulders = mesh(new THREE.CapsuleGeometry(0.135, 0.5, 8, 20), mat.suit, torso, 0, 0.74, 0);
-  shoulders.rotation.z = Math.PI / 2;
-  shoulders.scale.set(1, 1, 0.78);
+  const jacket = mesh(lathe([[0, -0.08], [0.2, -0.08], [0.226, -0.045], [0.214, 0.1], [0.218, 0.28], [0.248, 0.43], [0.256, 0.48], [0.225, 0.53], [0.13, 0.565], [0, 0.575]], 64), mat.suit, torso);
+  jacket.scale.z = 0.72;
 
-  // shirt V, lapels, tie, vest buttons
   const front = new THREE.Group();
-  front.position.set(0, 0.79, 0.225);
-  front.rotation.x = -0.12;
+  front.position.set(0, 0.545, 0.163);
+  front.rotation.x = 0.07;
   torso.add(front);
-  const vShape = new THREE.Shape();
-  vShape.moveTo(-0.11, 0); vShape.lineTo(0.11, 0); vShape.lineTo(0, -0.36); vShape.closePath();
-  mesh(new THREE.ShapeGeometry(vShape), mat.shirt, front, 0, 0, 0.004);
-  const lapelShape = (s) => {
-    const sh = new THREE.Shape();
-    sh.moveTo(s * 0.11, 0.01); sh.lineTo(s * 0.17, -0.05); sh.lineTo(s * 0.1, -0.13); sh.lineTo(s * 0.13, -0.17); sh.lineTo(s * 0.012, -0.4); sh.lineTo(0, -0.37); sh.closePath();
-    return new THREE.ExtrudeGeometry(sh, { depth: 0.012, bevelEnabled: false });
-  };
-  mesh(lapelShape(-1), mat.suitDark, front, 0, 0, 0.002);
-  mesh(lapelShape(1), mat.suitDark, front, 0, 0, 0.002);
-  const tieShape = new THREE.Shape();
-  tieShape.moveTo(-0.022, 0); tieShape.lineTo(0.022, 0); tieShape.lineTo(0.034, -0.3); tieShape.lineTo(0, -0.34); tieShape.lineTo(-0.034, -0.3); tieShape.closePath();
-  mesh(new THREE.ExtrudeGeometry(tieShape, { depth: 0.012, bevelEnabled: false }), mat.tie, front, 0, -0.02, 0.008);
-  mesh(new THREE.SphereGeometry(0.03, 12, 12), mat.tie, front, 0, -0.012, 0.012).scale.set(1.2, 0.8, 0.6); // knot
-  [-0.47, -0.58].forEach((y) => mesh(new THREE.SphereGeometry(0.016, 10, 10), mat.button, torso, 0.0, 0.79 + y + 0.04, 0.215));
-  // pocket square line
-  mesh(new THREE.BoxGeometry(0.09, 0.008, 0.01), mat.suitDark, torso, 0.17, 0.6, 0.205);
+  mesh(flat([[-0.12, 0.01], [0.12, 0.01], [0, -0.45]], 0.01, 0.003), mat.vest, front, 0, 0, 0);                    // waistcoat
+  mesh(flat([[-0.075, 0.012], [0.075, 0.012], [0, -0.21]], 0.008, 0.002), mat.shirt, front, 0, 0, 0.008);          // shirt
+  mesh(flat([[-0.018, 0], [0.018, 0], [0.03, -0.2], [0, -0.235], [-0.03, -0.2]], 0.008, 0.003), mat.tie, front, 0, -0.03, 0.014); // tie
+  mesh(new THREE.SphereGeometry(0.024, 14, 12), mat.tie, front, 0, -0.022, 0.02).scale.set(1.25, 0.95, 0.7);      // knot
+  [-1, 1].forEach((s) => {
+    mesh(flat([[s * 0.012, 0.03], [s * 0.078, 0.022], [s * 0.04, -0.045]], 0.006, 0.002), mat.shirt, front, 0, 0, 0.02); // collar points
+    mesh(flat([[s * 0.088, 0.012], [s * 0.16, 0.004], [s * 0.172, -0.06], [s * 0.128, -0.088], [s * 0.152, -0.12], [s * 0.036, -0.46], [0, -0.46]], 0.012, 0.004), mat.lapel, front, 0, 0, 0.012); // lapels
+  });
+  [-0.27, -0.33, -0.39].forEach((y) => mesh(new THREE.SphereGeometry(0.0095, 10, 8), mat.button, front, 0, y, 0.016));
+  mesh(new THREE.SphereGeometry(0.014, 12, 10), mat.button, front, 0, -0.5, 0.004);                                // jacket button
+  mesh(new THREE.BoxGeometry(0.085, 0.006, 0.01), mat.lapel, torso, 0.13, 0.33, 0.16).rotation.z = -0.08;           // breast pocket
+  mesh(new THREE.CylinderGeometry(0.058, 0.066, 0.15, 24), mat.skin, torso, 0, 0.6, 0);                             // neck
 
-  // neck + collar
-  mesh(new THREE.CylinderGeometry(0.075, 0.085, 0.14, 20), mat.skin, torso, 0, 0.86, 0);
-  const collar = mesh(new THREE.TorusGeometry(0.085, 0.028, 10, 24, Math.PI * 1.5), mat.shirt, torso, 0, 0.84, 0);
-  collar.rotation.set(Math.PI / 2, 0, Math.PI * 0.25 + Math.PI);
-
-  // arms
+  // arms: shoulder -> elbow -> hand, real fingers so the wave reads
   const makeArm = (side, withWatch) => {
     const shoulder = new THREE.Group();
-    shoulder.position.set(side * 0.38, 0.74, 0);
+    shoulder.position.set(side * 0.245, 0.475, 0);
     torso.add(shoulder);
-    mesh(new THREE.CapsuleGeometry(0.088, 0.3, 8, 16), mat.suit, shoulder, 0, -0.19, 0);
+    mesh(new THREE.SphereGeometry(0.07, 20, 16), mat.suit, shoulder);
+    mesh(new THREE.CapsuleGeometry(0.068, 0.2, 8, 16), mat.suit, shoulder, 0, -0.13, 0);
     const elbow = new THREE.Group();
-    elbow.position.y = -0.39;
+    elbow.position.y = -0.27;
     shoulder.add(elbow);
-    mesh(new THREE.CapsuleGeometry(0.078, 0.27, 8, 16), mat.suit, elbow, 0, -0.16, 0);
-    mesh(new THREE.CylinderGeometry(0.066, 0.066, 0.05, 16), mat.shirt, elbow, 0, -0.34, 0);
+    mesh(new THREE.CapsuleGeometry(0.062, 0.17, 8, 16), mat.suit, elbow, 0, -0.11, 0);
+    mesh(new THREE.CylinderGeometry(0.052, 0.054, 0.035, 18), mat.shirt, elbow, 0, -0.235, 0);                     // cuff
     const hand = new THREE.Group();
-    hand.position.y = -0.41;
+    hand.position.y = -0.255;
     elbow.add(hand);
-    mesh(new THREE.SphereGeometry(0.068, 16, 16), mat.skin, hand, 0, -0.02, 0).scale.set(0.85, 1.15, 0.6);
-    mesh(new THREE.CapsuleGeometry(0.02, 0.05, 4, 8), mat.skin, hand, side * -0.05, -0.01, 0.02).rotation.z = side * 0.6; // thumb
+    mesh(new THREE.SphereGeometry(0.05, 18, 14), mat.skin, hand, 0, -0.035, 0).scale.set(0.95, 1, 0.52);           // palm
+    [-0.022, -0.007, 0.008, 0.023].forEach((x, i) => {
+      const len = [0.03, 0.04, 0.038, 0.028][i];
+      const f = mesh(new THREE.CapsuleGeometry(0.0115, len, 4, 8), mat.skin, hand, x * 1.05, -0.085 - len * 0.35, 0);
+      f.rotation.z = (i - 1.5) * 0.09;
+    });
+    const thumb = mesh(new THREE.CapsuleGeometry(0.012, 0.03, 4, 8), mat.skin, hand, -side * 0.045, -0.045, 0.012);
+    thumb.rotation.z = -side * 0.75;
     if (withWatch) {
-      const strap = mesh(new THREE.TorusGeometry(0.066, 0.016, 8, 24), mat.strap, elbow, 0, -0.31, 0);
+      const strap = mesh(new THREE.TorusGeometry(0.054, 0.011, 8, 28), mat.strap, elbow, 0, -0.205, 0);
       strap.rotation.x = Math.PI / 2;
-      const face = mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.014, 20), mat.steel, elbow, side * 0.065, -0.31, 0);
-      face.rotation.z = Math.PI / 2;
+      const face = mesh(new THREE.CylinderGeometry(0.024, 0.024, 0.012, 24), mat.steel, elbow, 0, -0.205, 0.058);
+      face.rotation.x = Math.PI / 2;
     }
-    return { shoulder, elbow, hand };
+    return { shoulder, elbow, hand, side };
   };
   const armR = makeArm(-1, false); // character's right (viewer's left) — the waving arm
   const armL = makeArm(1, true);   // character's left wears the watch
 
   /* ---- head ---- */
+  const R = 0.27;
   const head = new THREE.Group();
-  head.position.set(0, 0.92, 0);
-  head.scale.setScalar(1.12);
+  head.position.set(0, 0.625, 0);
   torso.add(head);
   const skull = new THREE.Group();
-  skull.position.y = 0.26;
-  skull.scale.set(0.92, 1.08, 0.96);
+  skull.position.y = 0.27;
+  skull.scale.set(0.94, 1.04, 0.98);
   head.add(skull);
-  mesh(new THREE.SphereGeometry(0.27, 40, 32), mat.skin, skull);
+  mesh(new THREE.SphereGeometry(R, 56, 44), mat.skin, skull);
+  // point on the face: x,y in skull units, pushed out by `out`
+  const onFace = (x, y, out = 0) => new THREE.Vector3(x, y, Math.sqrt(Math.max(R * R - x * x - y * y, 0)) + out);
+
   // ears
-  [-1, 1].forEach((s) => mesh(new THREE.SphereGeometry(0.055, 12, 12), mat.skin, skull, s * 0.262, 0.0, -0.01).scale.set(0.45, 1, 0.7));
-  // hair: cap + swept-up quiff + sides
-  const cap = mesh(new THREE.SphereGeometry(0.287, 40, 20, 0, Math.PI * 2, 0, Math.PI * 0.52), mat.hair, skull, 0, 0.015, -0.012);
-  cap.rotation.x = -0.65;
-  const quiff = mesh(new THREE.SphereGeometry(0.2, 24, 16), mat.hair, skull, 0.02, 0.24, 0.07);
-  quiff.scale.set(1.25, 0.5, 1.05);
-  quiff.rotation.set(-0.35, 0, 0.12);
-  const quiff2 = mesh(new THREE.SphereGeometry(0.12, 20, 12), mat.hair, skull, -0.07, 0.25, 0.15);
-  quiff2.scale.set(1.3, 0.55, 0.9);
-  quiff2.rotation.set(-0.5, 0.2, 0.25);
   [-1, 1].forEach((s) => {
-    const side = mesh(new THREE.SphereGeometry(0.12, 16, 12), mat.hair, skull, s * 0.22, 0.09, -0.04);
-    side.scale.set(0.45, 1, 1.3);
+    mesh(new THREE.SphereGeometry(0.05, 16, 12), mat.skin, skull, s * 0.272, -0.01, -0.02).scale.set(0.5, 1, 0.7);
   });
-  // beard (lower shell of a sphere, wrapping jaw to ears) + chin + moustache
-  // sides of the beard (jaw line up to the ears) + lower centre (below the lips)
-  [[0.03, 0.36], [0.64, 0.33]].forEach(([ps, pl]) => {
-    const g = new THREE.SphereGeometry(0.283, 24, 20, Math.PI * ps, Math.PI * pl, Math.PI * 0.5, Math.PI * 0.39);
-    mesh(g, mat.beard, skull, 0, 0, 0.004);
-  });
-  mesh(new THREE.SphereGeometry(0.283, 24, 16, Math.PI * 0.36, Math.PI * 0.29, Math.PI * 0.69, Math.PI * 0.2), mat.beard, skull, 0, 0, 0.004);
-  const chin = mesh(new THREE.SphereGeometry(0.11, 20, 16), mat.beard, skull, 0, -0.215, 0.16);
-  chin.scale.set(1.25, 0.85, 0.9);
-  const stache = mesh(new THREE.CapsuleGeometry(0.016, 0.12, 4, 10), mat.beard, skull, 0, -0.088, 0.262);
-  stache.rotation.z = Math.PI / 2;
-  // lips
-  mesh(new THREE.CapsuleGeometry(0.012, 0.045, 4, 8), mat.skinDark, skull, 0, -0.13, 0.252).rotation.z = Math.PI / 2;
+
+  // hair: one sculpted shell — high swept-back quiff, short tidy sides
+  const hairFn = (n) => {
+    const fr = Math.max(n.z, 0), bk = Math.max(-n.z, 0);
+    const thr = 0.56 * fr - 0.55 * bk - 0.02 - 0.06 * (1 - Math.abs(n.x)) * fr;
+    const m = ss(thr - 0.025, thr + 0.06, n.y);
+    const quiff = Math.exp(-((n.y - 0.7) ** 2 + (n.z - 0.62) ** 2) / 0.16) * (1 - 0.55 * n.x * n.x);
+    const crown = ss(0.1, 0.9, n.y);
+    const thick = 0.035 + 0.05 * crown * (0.5 + 0.5 * fr) + 0.34 * quiff;
+    const o = n.multiplyScalar(0.965 + m * thick);
+    o.y += m * quiff * 0.09;
+    return o;
+  };
+  mesh(sculpt(R, hairFn, 128, 96), mat.hair, skull);
+
+  // beard: sculpted shell over jaw + sideburns, opening for the mouth
+  const beardFn = (n) => {
+    const bthr = -0.34 + 0.48 * Math.abs(n.x);
+    let m = (1 - ss(bthr - 0.05, bthr + 0.05, n.y)) * ss(-0.12, 0.12, n.z);
+    if (n.z > 0.4) m *= ss(0.72, 1.05, Math.hypot(n.x / 0.3, (n.y + 0.39) / 0.11));
+    const chin = ss(-0.45, -0.95, n.y) * ss(-0.1, 0.6, n.z);
+    const r = 0.965 + m * (0.055 + 0.03 * ss(-0.3, -0.85, n.y));
+    const o = n.multiplyScalar(r);
+    o.y -= m * chin * 0.06;
+    o.z += m * chin * 0.035;
+    return o;
+  };
+  mesh(sculpt(R, beardFn, 128, 96), mat.beard, skull);
+  // moustache
+  const stache = [];
+  for (let u = -1; u <= 1.001; u += 0.25) {
+    const x = u * 0.072, y = -0.074 - 0.014 * u * u;
+    const p = onFace(x, y, 0.014);
+    stache.push([p.x, p.y, p.z]);
+  }
+  mesh(tube(stache, 0.017, 24), mat.beard, skull);
+  // friendly smile
+  const smile = [];
+  for (let u = -1; u <= 1.001; u += 0.25) {
+    const x = u * 0.052, y = -0.106 + 0.017 * u * u;
+    const p = onFace(x, y, 0.002);
+    smile.push([p.x, p.y, p.z]);
+  }
+  const mouth = mesh(tube(smile, 0.0075, 20), mat.lip, skull);
+
   // nose
-  const nose = mesh(new THREE.SphereGeometry(0.042, 16, 16), mat.skin, skull, 0, -0.02, 0.272);
-  nose.scale.set(0.85, 1, 1.05);
-  mesh(new THREE.CapsuleGeometry(0.02, 0.07, 4, 8), mat.skin, skull, 0, 0.03, 0.262).rotation.x = -0.25; // bridge
-  // eyes + brows
+  mesh(new THREE.SphereGeometry(0.036, 18, 14), mat.skin, skull, 0, -0.03, 0.262).scale.set(0.85, 0.9, 1);
+  mesh(new THREE.CapsuleGeometry(0.017, 0.06, 4, 10), mat.skin, skull, 0, 0.015, 0.258).rotation.x = -0.22;
+
+  // eyes: white + iris + pupil + catch-light, plus arched brows
   const eyes = [];
   [-1, 1].forEach((s) => {
     const eye = new THREE.Group();
-    eye.position.set(s * 0.092, 0.045, 0.25);
+    const c = onFace(s * 0.09, 0.03, -0.02);
+    eye.position.copy(c);
+    eye.rotation.y = s * 0.3;
     skull.add(eye);
-    mesh(new THREE.SphereGeometry(0.05, 16, 16), mat.eyeW, eye).scale.set(1.1, 0.8, 0.5);
-    const pupil = mesh(new THREE.SphereGeometry(0.028, 12, 12), mat.pupil, eye, 0, -0.004, 0.02);
-    pupil.scale.set(1, 1, 0.5);
-    eyes.push({ eye, pupil });
-    const brow = mesh(new THREE.CapsuleGeometry(0.014, 0.075, 4, 8), mat.hair, skull, s * 0.095, 0.11, 0.256);
-    brow.rotation.z = Math.PI / 2 - s * 0.1;
+    mesh(new THREE.SphereGeometry(0.046, 20, 16), mat.eyeW, eye).scale.set(1, 1.05, 0.55);
+    const look = new THREE.Group();
+    look.position.z = 0.022;
+    eye.add(look);
+    mesh(new THREE.SphereGeometry(0.027, 18, 14), mat.iris, look).scale.set(1, 1, 0.35);
+    mesh(new THREE.SphereGeometry(0.015, 14, 10), mat.pupil, look, 0, 0, 0.004).scale.set(1, 1, 0.35);
+    mesh(new THREE.SphereGeometry(0.0065, 8, 6), mat.shine, look, 0.009, 0.011, 0.01);
+    eyes.push({ eye, look });
+    const brow = [];
+    for (let u = 0; u <= 1.001; u += 0.2) {
+      const x = s * (0.045 + u * 0.09), y = 0.092 + 0.014 * Math.sin(u * Math.PI) - u * 0.004;
+      const p = onFace(x, y, 0.006);
+      brow.push([p.x, p.y, p.z]);
+    }
+    mesh(tube(brow, 0.0115, 16), mat.hair, skull);
   });
 
   /* ---- animation ---- */
-  let blinkAt = 2, nextBlink = 3;
+  let blinkAt = -1, nextBlink = 2.5;
+  const restArm = (arm, t, run, stride, dir) => {
+    arm.shoulder.rotation.z = lerp(arm.shoulder.rotation.z, arm.side * (0.12 + Math.sin(t * 2) * 0.02), 0.1);
+    arm.shoulder.rotation.x = lerp(arm.shoulder.rotation.x, dir * stride * 0.7 * run, 0.25);
+    arm.elbow.rotation.z = lerp(arm.elbow.rotation.z, arm.side * -0.05, 0.1);
+    arm.elbow.rotation.x = lerp(arm.elbow.rotation.x, -0.35 * run - 0.12, 0.1);
+    arm.hand.rotation.y = lerp(arm.hand.rotation.y, arm.side * 1.25, 0.1);
+    arm.hand.rotation.z = lerp(arm.hand.rotation.z, 0, 0.1);
+  };
   const api = {
     root, body, head, jump: 0, landAt: -10,
     animate(t, dt, { run, waving, waveT, lookX, lookY }) {
-      // breathing + idle bob
+      // breathing + idle sway
       const breathe = Math.sin(t * 2) * 0.012;
-      chest.scale.y = 1 + breathe;
-      shoulders.position.y = 0.74 + breathe * 0.5;
+      jacket.scale.set(1 + breathe, 1, 0.72 * (1 + breathe));
+      torso.rotation.z = Math.sin(t * 0.9) * 0.012;
 
       // running between sections
       const stride = Math.sin(t * 11);
       legs[0].rotation.x = stride * 0.6 * run;
       legs[1].rotation.x = -stride * 0.6 * run;
-      body.position.y = Math.abs(Math.sin(t * 11)) * 0.06 * run + Math.sin(t * 2) * 0.006;
+      body.position.y = Math.abs(stride) * 0.05 * run + Math.sin(t * 2) * 0.005;
 
       // little hop when waving starts
       if (api.jump > 0) {
         api.jump = Math.max(0, api.jump - dt * 2.2);
-        body.position.y += Math.sin((1 - api.jump) * Math.PI) * 0.12;
+        body.position.y += Math.sin((1 - api.jump) * Math.PI) * 0.1;
       }
 
-      // right arm: wave or idle/run swing
+      // right arm: wave (palm to camera) or idle/run swing
       if (waving) {
         const up = clamp(waveT * 4, 0, 1);
         const sw = Math.sin(waveT * 11);
-        armR.shoulder.rotation.z = lerp(armR.shoulder.rotation.z, -2.55, 0.25 * up + 0.05);
-        armR.shoulder.rotation.x = lerp(armR.shoulder.rotation.x, -0.25, 0.2);
-        armR.elbow.rotation.z = lerp(armR.elbow.rotation.z, -0.25 + sw * 0.42, 0.35);
-        armR.hand.rotation.z = sw * 0.25;
+        armR.shoulder.rotation.z = lerp(armR.shoulder.rotation.z, -2.5, 0.25 * up + 0.05);
+        armR.shoulder.rotation.x = lerp(armR.shoulder.rotation.x, -0.2, 0.2);
+        armR.elbow.rotation.z = lerp(armR.elbow.rotation.z, -0.3 + sw * 0.42, 0.35);
+        armR.elbow.rotation.x = lerp(armR.elbow.rotation.x, 0, 0.2);
+        armR.hand.rotation.y = lerp(armR.hand.rotation.y, 0, 0.25);
+        armR.hand.rotation.z = sw * 0.22;
         head.rotation.z = lerp(head.rotation.z, 0.1 + sw * 0.03, 0.1);
+        mouth.scale.x = lerp(mouth.scale.x, 1.18, 0.15);
       } else {
-        armR.shoulder.rotation.z = lerp(armR.shoulder.rotation.z, -0.1 - Math.sin(t * 2) * 0.02, 0.1);
-        armR.shoulder.rotation.x = lerp(armR.shoulder.rotation.x, -stride * 0.7 * run, 0.25);
-        armR.elbow.rotation.z = lerp(armR.elbow.rotation.z, 0.06, 0.1);
-        armR.elbow.rotation.x = lerp(armR.elbow.rotation.x, -0.3 * run - 0.08, 0.1);
-        armR.hand.rotation.z = lerp(armR.hand.rotation.z, 0, 0.1);
+        restArm(armR, t, run, stride, -1);
         head.rotation.z = lerp(head.rotation.z, 0, 0.08);
+        mouth.scale.x = lerp(mouth.scale.x, 1, 0.1);
       }
-      armL.shoulder.rotation.z = lerp(armL.shoulder.rotation.z, 0.1 + Math.sin(t * 2) * 0.02, 0.1);
-      armL.shoulder.rotation.x = lerp(armL.shoulder.rotation.x, stride * 0.7 * run, 0.25);
-      armL.elbow.rotation.x = lerp(armL.elbow.rotation.x, -0.3 * run - 0.08, 0.1);
+      restArm(armL, t, run, stride, 1);
 
-      // head follows the cursor
-      head.rotation.y = lerp(head.rotation.y, lookX * 0.55, 0.08);
-      head.rotation.x = lerp(head.rotation.x, -lookY * 0.25, 0.08);
-      eyes.forEach(({ pupil }) => {
-        pupil.position.x = lerp(pupil.position.x, lookX * 0.012, 0.1);
-        pupil.position.y = lerp(pupil.position.y, lookY * 0.008, 0.1);
+      // head + eyes follow the cursor
+      head.rotation.y = lerp(head.rotation.y, lookX * 0.5, 0.08);
+      head.rotation.x = lerp(head.rotation.x, -lookY * 0.22, 0.08);
+      eyes.forEach(({ look }) => {
+        look.position.x = lerp(look.position.x, lookX * 0.011, 0.1);
+        look.position.y = lerp(look.position.y, lookY * 0.008, 0.1);
       });
 
       // blink
       if (t > nextBlink) { blinkAt = t; nextBlink = t + 2 + Math.random() * 3; }
-      const b = t - blinkAt < 0.14 ? 0.1 : 1;
+      const b = t - blinkAt < 0.13 ? 0.08 : 1;
       eyes.forEach(({ eye }) => (eye.scale.y = lerp(eye.scale.y, b, 0.6)));
 
       // platform pulse
       ring1.material.opacity = 0.6 + Math.sin(t * 3) * 0.3;
       ring2.rotation.z = t * 0.4;
       ring2.scale.setScalar(1 + Math.sin(t * 1.5) * 0.04);
-      beam.material.opacity = 0.22 + Math.sin(t * 2.2) * 0.08;
+      beam.material.opacity = 0.2 + Math.sin(t * 2.2) * 0.07;
     },
   };
   return api;
